@@ -1,0 +1,25 @@
+{% load page_tags mptt_tags %}
+
+{% tree_from_root current_page as page_tree %}
+{% get_page_ancestor_ids current_page as ancestor_ids %}
+
+{% if page_tree|show_nav %}
+    <div class="secondary-nav">
+        <nav>
+            <ul>
+                {% recursetree page_tree %}
+                    {% if node.show_in_navigation %}
+                        <li>
+                            <a href="{{ node.url }}"{% if node.id in ancestor_ids %} class="active"{% endif %}>{{ node.title }}</a>
+                            {% if not node.is_leaf_node and node.level < 2 and node.id in ancestor_ids %}
+                                <ul>
+                                    {{ children }}
+                                </ul>
+                            {% endif %}
+                        </li>
+                    {% endif %}
+                {% endrecursetree %}
+            </ul>
+        </nav>
+    </div>
+{% endif %}

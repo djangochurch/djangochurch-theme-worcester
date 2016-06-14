@@ -1,0 +1,10 @@
+{% extends "news/base_post_list.html" %}
+
+
+{% block title %}{{ category.title }} - News - {{ block.super }}{% endblock %}
+
+
+{% block breadcrumbs %}
+{{ block.super }}
+<li><a href="{{ category.get_absolute_url }}">{{ category.title }}</a></li>
+{% endblock breadcrumbs %}

@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load page_tags %}
+
+
+{% block title %}{{ lazy_page.title }} - {{ block.super }}{% endblock %}
+
+
+{% block nav %}
+{% include "includes/nav.html" with current_page=lazy_page only %}
+{% endblock nav %}
+
+
+{% block breadcrumbs %}
+{% if lazy_page.get_absolute_url != "/" %}
+    {% for ancestor_page in lazy_page.get_ancestors %}
+        <li><a href="{{ ancestor_page.get_absolute_url }}">{{ ancestor_page.title }}</a></li>
+    {% endfor %}
+
+    <li><a href="{{ lazy_page.get_absolute_url }}">{{ lazy_page.title }}</a></li>
+{% endif %}
+{% endblock breadcrumbs %}
+
+
+{% block subnav %}
+{% include "includes/subnav.html" with current_page=lazy_page only %}
+{% endblock subnav %}
+
+
+{% block article_full %}{% if not lazy_page.get_root.get_children|show_nav %}full{% endif %}{% endblock %}
+
+
+{% block content %}
+{{ lazy_page.content|safe }}
+
+<form method="POST" action="">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <button type="submit">Submit</button>
+</form>
+{% endblock content %}

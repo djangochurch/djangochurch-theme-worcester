@@ -1,0 +1,42 @@
+{% load page_tags mptt_tags %}
+
+<ul class="primary">
+    {% get_root_pages current_page as root_pages %}
+    {% for page, page_active in root_pages %}
+        <li><a href="{{ page.get_absolute_url }}"{% if page_active %} class="active"{% endif %}>{{ page.title }}</a></li>
+    {% endfor %}
+</ul>
+
+{% full_tree_for_model pages.Page as page_tree %}
+{% get_page_ancestor_ids current_page as ancestor_ids %}
+
+<label for="mobile-menu-toggle"><span>Menu</span></label>
+<input type="checkbox" id="mobile-menu-toggle">
+<div class="mobile-menu">
+    <ul class="header-block-links">
+        <li class="church-life"><a href="/church-life/">Church Life</a></li>
+        <li class="church-members"><a href="/church-members/">Church Members</a></li>
+        <li class="our-faith"><a href="/our-faith/">Our Faith</a></li>
+    </ul>
+    <ul>
+        {% recursetree page_tree %}
+            {% if node.show_in_navigation %}
+                {% if node.id in ancestor_ids %}
+                    <li class="active">
+                        <a href="{{ node.url }}" class="active">{{ node.title }}</a>
+
+                        {% if not node.is_leaf_node and node.level < 2 %}
+                            {% if node.get_children|show_nav %}
+                                <ul>
+                                    {{ children }}
+                                </ul>
+                            {% endif %}
+                        {% endif %}
+                    </li>
+                {% else %}
+                    <li><a href="{{ node.get_absolute_url }}">{{ node.title }}</a></li>
+                {% endif %}
+            {% endif %}
+        {% endrecursetree %}
+    </ul>
+</div>

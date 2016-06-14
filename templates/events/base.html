@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+
+{% block nav %}
+{% include "includes/nav.html" with current_page='blanc_basic_events:events-home' only %}
+{% endblock nav %}
+
+
+
+{% block breadcrumbs %}
+<li><a href="{% url 'blanc_basic_events:events-home' %}">Events</a></li>
+{% endblock breadcrumbs %}

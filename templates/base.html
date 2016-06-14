@@ -1,0 +1,123 @@
+{% load static from staticfiles %}{% load news_tags events_tags %}<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{% block title %}{{ request.site.name }}{% endblock %}</title>
+    <meta name="author" content="{{ request.site.name }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <link href="//fonts.googleapis.com/css?family=Titillium+Web|Source+Sans+Pro:400,700" rel="stylesheet">
+    <!--[if lt IE 9]>
+        <script src="{% static 'js/modernizr.js' %}"></script>
+    <![endif]-->
+    {% block endhead %}{% endblock %}
+</head>
+<body class="{% block bodyclass %}default{% endblock %}">
+
+<main class="page">
+    <header class="head">
+        <div class="quad-block-header">
+            <div class="wrapper">
+                <div class="header-block first"><a href="/" class="logo"></a></div>
+                <div class="header-block faith"><a href="/church-life/"><p class="nav-icon faith">Church<br/>Life</p></a></div>
+                <div class="header-block people"><a href="/church-members/"><p class="nav-icon people">Church Members</p></a></div>
+                <div class="header-block mission"><a href="/our-faith/"><p class="nav-icon ministry">Our<br/>Faith</p></a></div>
+            </div>
+        </div>
+        <nav class="nav">
+            {% block nav %}
+            {% include "includes/nav.html" only %}
+            {% endblock nav %}
+        </nav>
+    </header>
+
+    <div class="main">
+        <div class="page-wrapper">
+            <div class="top-bar">
+                <div class="pebble-trail">
+                    <p>You are here:</p>
+                    <ul>
+                        <li><a href="/">Home</a></li>
+
+                        {% block breadcrumbs %}{% endblock breadcrumbs %}
+                    </ul>
+                    <ul class="social-icons">
+                        {% block social_icons %}
+                            <li><a href="javascript:window.print()"class="print"><span>Print</span></a></li>
+                            <li><a href="mailto:?subject={% filter urlencode:"" %}{{ request.site.name|safe }}{% endfilter %}&amp;body={% filter urlencode:"" %}{{ request.scheme }}://{{ request.get_host }}{{ request.path }}{% endfilter %}"class="email"><span>Email</span></a></li>
+                            <li><a href="https://www.facebook.com/sharer/sharer.php?u={% filter urlencode:"" %}{{ request.scheme }}://{{ request.get_host }}{{ request.path }}{% endfilter %}"class="facebook"><span>Facebook</span></a></li>
+                            <li><a href="https://twitter.com/share?url={% filter urlencode:"" %}{{ request.scheme }}://{{ request.get_host }}{{ request.path }}{% endfilter %}"class="twitter"><span>Twitter</span></a></li>
+                        {% endblock social_icons %}
+                    </ul>
+                </div>
+
+                {% block subnav %}{% endblock subnav %}
+            </div>
+
+            <article class="content box {% block article_full %}full{% endblock %}">
+                {% block hero_image %}{% endblock hero_image %}
+
+                <div class="wrap">
+                    {% block content %}{% endblock %}
+                </div>
+                <aside class="side">
+                    <div class="box">
+                        <div class="news">
+                            {% get_latest_news 1 as news_list %}
+                            {% for news in news_list %}
+                                <h2><a href="{{ news.get_absolute_url }}">{{ news.title|truncatewords:5 }}</a></h2>
+                                <h5>{{ news.date|date:"d M Y" }}</h5>
+                                <p>
+                                    {% if news.teaser %}
+                                        {{ news.teaser|truncatewords:10 }}
+                                    {% else %}
+                                        {{ news.content|striptags|truncatewords:10 }}
+                                    {% endif %}
+
+                                    <a href="{{ news.get_absolute_url }}" title="{{ news.title }}">more</a>
+                                </p>
+                                <h3><a href="{% url 'blanc_basic_news:post-list' %}">More News...</a></h3>
+                            {% endfor %}
+                        </div>
+                        <div class="events">
+                            {% get_upcoming_events 1 as events %}
+                            {% for event in events %}
+                                <h2><a href="{{ event.get_absolute_url }}">{{ event.title|truncatewords:5 }}</a></h2>
+                                <h5>{{ event.start|date:"d M Y" }}</h5>
+                                <p>{{ event.summary|truncatewords:10 }} <a href="{{ event.get_absolute_url }}" title="{{ event.title }}">more</a></p>
+                                <h3><a href="{% url 'blanc_basic_events:events-home' %}">More Events...</a></h3>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </aside>
+            </article>
+
+        </div>
+    </div>
+</main>
+
+<footer class="foot">
+    <div class="wrapper">
+        <div class="eq-height">
+            <div class="address eq">
+                {% block footer_address %}
+                    <h3><a href="https://www.google.co.uk/" target="_blank">Address goes here</a></h3>
+                    <h3><a href="tel:+441214960000">Tel:</a> 0121 496 0000</h3>
+                {% endblock footer_address %}
+            </div>
+            <div class="pull-right foot-logo eq"><a href="http://www.cofe-worcester.org.uk/"></a></div>
+        </div>
+        <p class="legal">
+            {% block footer_copyright %}
+                &copy; Copyright {% now "Y" %}. All rights reserved.
+            {% endblock footer_copyright %}
+        </p>
+        <div class="pull-right">
+            <p>Design by <a href="https://www.blanc.ltd.uk/" target="_blank">Blanc</a></p>
+        </div>
+    </div>
+</footer>
+
+{% block endpage %}{% endblock %}
+
+</body>
+</html>

@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load news_tags %}
+
+
+{% block endhead %}
+<link rel="alternate" type="application/rss+xml" title="News" href="{% url 'blanc_basic_news:feed' %}" />
+{% endblock endhead %}
+
+
+{% block bodyclass %}news-page{% endblock bodyclass %}
+
+{% block nav %}
+{% include "includes/nav.html" with current_page='blanc_basic_news:post-list' only %}
+{% endblock nav %}
+
+
+{% block breadcrumbs %}
+<li><a href="{% url 'blanc_basic_news:post-list' %}">News</a></li>
+{% endblock breadcrumbs %}
+
+
+{% block article_full %}{% endblock %}
+
+
+{% block subnav %}
+<div class="secondary-nav">
+    <nav>
+        <ul>
+            {% get_news_categories as news_categories %}
+            {% for i in news_categories %}
+                <li><a href="{{ i.get_absolute_url }}"{% if category == i or object.category == i %} class="active"{% endif %}>{{ i }}</a></li>
+            {% endfor %}
+        </ul>
+    </nav>
+</div>
+{% endblock subnav %}

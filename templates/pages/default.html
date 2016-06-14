@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load page_tags thumbnail %}
+
+
+{% block title %}{{ page.title }} - {{ block.super }}{% endblock %}
+
+
+{% block nav %}
+{% include "includes/nav.html" with current_page=page only %}
+{% endblock nav %}
+
+
+{% block breadcrumbs %}
+{% if page.get_absolute_url != "/" %}
+    {% for ancestor_page in page.get_ancestors %}
+        <li><a href="{{ ancestor_page.get_absolute_url }}">{{ ancestor_page.title }}</a></li>
+    {% endfor %}
+
+    <li><a href="{{ page.get_absolute_url }}">{{ page.title }}</a></li>
+{% endif %}
+{% endblock breadcrumbs %}
+
+
+{% block article_full %}{% if not page.get_root.get_children|show_nav %}full{% endif %}{% endblock %}
+
+
+{% block subnav %}
+{% include "includes/subnav.html" with current_page=page only %}
+{% endblock subnav %}
+
+
+{% block hero_image %}
+{% if page.hero_image %}
+    {% thumbnail page.hero_image.file "721" as thumb %}
+        <img class="hero-image" src="{{ thumb.url }}" width="{{ thumb.width }}" height="{{ thumb.height }}" alt="" />
+    {% endthumbnail %}
+{% endif %}
+{% endblock hero_image %}
+
+
+{% block content %}
+<p>{{ page.content|safe }}</p>
+{% endblock content %}
