@@ -16,11 +16,11 @@
     <ul class="header-block-links">
         <li class="church-life"><a href="/church-life/">Church Life</a></li>
         <li class="church-members"><a href="/church-members/">Church Members</a></li>
-        <li class="our-faith"><a href="/our-faith/">Our Faith</a></li>
+        <li class="our-faith"><a href="/finding-faith/">Finding Faith</a></li>
     </ul>
     <ul>
         {% recursetree page_tree %}
-            {% if node.show_in_navigation %}
+            {% if node.show_in_navigation or node.url == '/church-life/' or node.url == '/church-members/' or node.url == '/finding-faith/' %}
                 {% if node.id in ancestor_ids %}
                     <li class="active">
                         <a href="{{ node.url }}" class="active">{{ node.title }}</a>
