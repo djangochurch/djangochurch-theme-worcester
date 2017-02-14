@@ -6,11 +6,9 @@
 <ul class="post-list">
     {% for i in object_list %}
         <li class="post summary {% if i.image %}image{% endif %}">
-            {% if i.image %}
-                {% thumbnail i.image.file "360x360" as thumb %}
-                    <a href="{{ i.get_absolute_url }}"><img src="{{ thumb.url }}" alt="{{ i }}" /></a>
-                {% endthumbnail %}
-            {% endif %}
+            {% thumbnail i.image.file "360x360" as thumb %}
+                <a href="{{ i.get_absolute_url }}"><img src="{{ thumb.url }}" alt="{{ i }}" /></a>
+            {% endthumbnail %}
 
             <h1>
                 <a {% if i.url %}target="_blank"{% endif %} href="{{ i.get_absolute_url }}">

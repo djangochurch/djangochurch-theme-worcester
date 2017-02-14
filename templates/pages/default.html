@@ -30,11 +30,9 @@
 
 
 {% block hero_image %}
-{% if page.hero_image %}
-    {% thumbnail page.hero_image.file "721" as thumb %}
-        <img class="hero-image" src="{{ thumb.url }}" width="{{ thumb.width }}" height="{{ thumb.height }}" alt="" />
-    {% endthumbnail %}
-{% endif %}
+{% thumbnail page.hero_image.file "721" as thumb %}
+    <img class="hero-image" src="{{ thumb.url }}" width="{{ thumb.width }}" height="{{ thumb.height }}" alt="" />
+{% endthumbnail %}
 {% endblock hero_image %}
 
 
